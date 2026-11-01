@@ -486,6 +486,137 @@ h1.page-title{font-family:var(--font-head);font-weight:800;font-size:34px;line-h
 .time-edit::-webkit-calendar-picker-indicator{display:none;}
 .authtabs .authtab.active{background:var(--gold);color:#000;}
 .acct-group h3,.authform label{letter-spacing:0;text-transform:none;font-size:13.5px;color:var(--ink-dim);}
+
+/* ===== v3 Plan: journey header, day chips, overview, status cards ===== */
+.jhead{display:flex;justify-content:space-between;align-items:flex-start;gap:14px;margin:4px 0 18px;}
+.eyebrow{font:700 11.5px/1 var(--font-body);letter-spacing:.14em;color:var(--gold);}
+.jtitle{font:600 34px/1.1 var(--font-head);margin:8px 0 6px;letter-spacing:-.01em;}
+.jsub{font-size:14px;color:var(--ink-dim);}
+.jbadge{flex-shrink:0;min-width:64px;text-align:center;background:rgba(224,176,79,.1);border:1px solid rgba(224,176,79,.35);border-radius:16px;padding:10px 12px;color:var(--ink-dim);font-size:11px;line-height:1.25;}
+.jbadge b{display:block;font:700 24px/1.1 var(--font-body);color:var(--gold);}
+.daychips{display:flex;gap:10px;margin-bottom:14px;}
+.daychips button{flex:1;appearance:none;text-align:left;background:var(--card2);border:1px solid var(--line);color:var(--ink);border-radius:16px;padding:12px 14px;cursor:pointer;min-height:64px;font-family:var(--font-body);transition:background .15s,border-color .15s;}
+.daychips button b{display:block;font:700 26px/1 var(--font-body);letter-spacing:-.01em;}
+.daychips button span{display:block;margin-top:7px;font:700 10.5px/1 var(--font-body);letter-spacing:.07em;color:var(--ink-faint);}
+.daychips button.active{background:var(--gold);border-color:var(--gold);color:#14100a;}
+.daychips button.active span{color:rgba(20,16,10,.72);}
+.overview{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:16px 16px 14px;margin-bottom:22px;}
+.ov-top{display:flex;justify-content:space-between;align-items:center;gap:10px;}
+.ov-top h3{font:600 17px/1.2 var(--font-body);margin:0;}
+.ov-pill{font:700 12px/1 var(--font-body);color:#3DDC97;background:rgba(61,220,151,.12);border-radius:999px;padding:6px 11px;}
+.ov-nums{display:flex;justify-content:space-between;margin:14px 0 4px;}
+.ov-nums div b{display:block;font:700 22px/1.1 var(--font-body);letter-spacing:-.01em;}
+.ov-nums div span{font-size:12px;color:var(--ink-faint);}
+.ov-nums div:last-child{text-align:right;}
+.ov-prog{margin-top:14px;padding-top:12px;border-top:1px solid var(--line);}
+.ov-prog-row{display:flex;justify-content:space-between;font:700 11px/1 var(--font-body);letter-spacing:.09em;color:var(--gold);margin-bottom:9px;}
+.ov-prog-row em{font-style:normal;letter-spacing:0;font-size:13px;color:var(--ink);font-weight:500;}
+.ov-bar{height:6px;border-radius:99px;background:rgba(224,176,79,.16);overflow:hidden;}
+.ov-bar i{display:block;height:100%;width:0;background:var(--gold);border-radius:99px;transition:width .4s ease;}
+.sched-head{display:flex;justify-content:space-between;align-items:center;margin:0 0 12px;}
+.sched-head h2{font:600 19px/1.2 var(--font-body);margin:0;}
+.editday{appearance:none;border:none;background:transparent;color:var(--gold);font:600 13px/1 var(--font-body);cursor:pointer;padding:8px 0 8px 8px;display:flex;align-items:center;gap:6px;}
+.editday.on{color:#14100a;background:var(--gold);border-radius:999px;padding:8px 14px;}
+.ptl{position:relative;}
+.pn{display:flex;gap:12px;align-items:stretch;}
+.pn-time{width:52px;flex-shrink:0;text-align:center;padding-top:15px;display:flex;flex-direction:column;align-items:center;}
+.pn-time b{font:700 15px/1 var(--font-body);color:var(--gold);letter-spacing:-.01em;}
+.pn-dot{display:block;width:10px;height:10px;border-radius:50%;background:var(--gold);margin-top:9px;box-shadow:0 0 0 4px rgba(224,176,79,.14);flex-shrink:0;}
+.state-done .pn-dot{background:#3DDC97;box-shadow:0 0 0 4px rgba(61,220,151,.16);}
+.state-next .pn-dot{background:var(--iznik);box-shadow:0 0 0 5px rgba(76,141,255,.22);}
+.state-delayed .pn-dot{background:var(--tulip);box-shadow:0 0 0 4px rgba(240,88,75,.18);}
+.state-done .pn-time b{color:var(--ink-faint);}
+.pn-card{flex:1;min-width:0;background:var(--card2);border:1px solid var(--line);border-radius:20px;padding:13px 14px;position:relative;}
+.state-next .pn-card{border-color:rgba(76,141,255,.55);box-shadow:0 0 0 1px rgba(76,141,255,.2);}
+.state-delayed .pn-card{border-color:rgba(240,88,75,.5);}
+.state-done .pn-card{opacity:.62;}
+.state-done .pn-name{text-decoration:line-through;text-decoration-color:rgba(255,255,255,.3);}
+.pn-top{display:flex;align-items:center;gap:8px;margin-bottom:9px;}
+.pn-cat{font:700 11px/1 var(--font-body);letter-spacing:.07em;text-transform:uppercase;padding:6px 10px;border-radius:999px;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex-shrink:1;}
+.pn-state{white-space:nowrap;flex-shrink:0;}
+.pn-top{min-width:0;}
+.pn-card{overflow:hidden;}
+.pn-state{font:700 10.5px/1 var(--font-body);letter-spacing:.07em;text-transform:uppercase;padding:6px 9px;border-radius:999px;}
+.st-next{color:var(--iznik);background:rgba(76,141,255,.14);}
+.st-delayed{color:var(--tulip);background:rgba(240,88,75,.14);}
+.st-done{color:#3DDC97;background:rgba(61,220,151,.12);}
+.st-upcoming{color:#FF9A62;background:rgba(255,122,69,.12);}
+.pn-spacer{flex:1;}
+.pn-icbtn{appearance:none;width:40px;height:40px;border-radius:50%;border:1px solid var(--line);background:transparent;color:var(--ink-dim);display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;margin:-6px -4px -6px 0;}
+.pn-icbtn.check.on{background:#3DDC97;border-color:#3DDC97;color:#04170e;}
+.pn-icbtn[aria-expanded="true"]{background:rgba(255,255,255,.1);color:var(--ink);}
+.pn-main{display:flex;gap:12px;cursor:pointer;}
+.pn-text{flex:1;min-width:0;}
+.pn-name{font:600 18px/1.25 var(--font-body);letter-spacing:-.005em;}
+.pn-desc{font-size:13.5px;line-height:1.45;color:var(--ink-dim);margin-top:5px;display:-webkit-box;-webkit-line-clamp:1;-webkit-box-orient:vertical;overflow:hidden;}
+.pn-open .pn-desc{-webkit-line-clamp:unset;display:block;}
+.pn-meta{display:flex;gap:14px;flex-wrap:wrap;margin-top:9px;font:600 12.5px/1 var(--font-body);color:var(--gold);}
+.pn-thumb{width:62px;height:62px;border-radius:14px;object-fit:cover;flex-shrink:0;background:var(--card);align-self:center;}
+.pn-more{display:none;margin-top:13px;padding-top:13px;border-top:1px solid var(--line);}
+.pn-open .pn-more{display:block;}
+.pn-acts{display:flex;gap:8px;flex-wrap:wrap;}
+.pn-acts .btn,.pn-acts a.btn{flex:1 1 auto;min-height:42px;font-size:13.5px;padding:0 14px;justify-content:center;text-align:center;}
+.pn-note{display:block;width:100%;margin-top:12px;background:var(--bg);border:1px solid var(--line);border-radius:12px;color:var(--ink);font:400 14px/1.45 var(--font-body);padding:11px 12px;min-height:64px;resize:vertical;}
+.pn-note::placeholder{color:var(--ink-faint);}
+.pn-menu{display:none;margin-top:13px;padding-top:13px;border-top:1px solid var(--line);gap:8px;flex-wrap:wrap;align-items:center;}
+.pn-menu.show,.edit-on .pn-menu{display:flex;}
+.pn-menu .btn{min-height:38px;font-size:13px;padding:0 13px;}
+.pn-menu .btn.danger{color:var(--tulip);border-color:rgba(240,88,75,.4);}
+.pn-menu .time-edit{width:96px;background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:8px 10px;}
+.pn-menu .time-reset{cursor:pointer;color:var(--gold);padding:6px;font-size:15px;}
+.pn-gap{display:flex;gap:12px;}
+.pn-gap .pn-time{padding-top:0;}
+.pn-gap .pn-time::before{content:"";display:block;width:2px;height:100%;min-height:44px;background:linear-gradient(var(--gold),rgba(224,176,79,.25));border-radius:2px;opacity:.55;}
+.pn-gapchip{flex:1;display:flex;align-items:center;gap:8px;padding:10px 4px;font-size:12.5px;color:var(--ink-dim);}
+.pn-gapchip em{font-style:normal;color:var(--ink);font-weight:600;}
+.pn-gapchip .tight{color:var(--tulip);font-weight:700;}
+.pn-gapchip svg{flex-shrink:0;color:var(--gold);}
+.late-card{display:flex;align-items:center;gap:12px;background:rgba(240,88,75,.08);border:1px solid rgba(240,88,75,.35);border-radius:16px;padding:12px 14px;margin:6px 0 14px;}
+.late-card p{margin:0;flex:1;font-size:13px;line-height:1.4;color:var(--ink-dim);}
+.late-card .btn{min-height:40px;font-size:13px;padding:0 14px;white-space:nowrap;}
+.plan-foot{border-top:1px solid var(--line);margin-top:8px;padding-top:14px;}
+.plan-foot .cont{display:flex;justify-content:space-between;align-items:center;color:var(--ink-dim);font-size:14px;margin-bottom:12px;}
+.plan-foot .cta{width:100%;justify-content:center;gap:10px;min-height:54px;font-size:17px;}
+.acct-row-go{cursor:pointer;}
+.acct-row-go:active{background:var(--card);border-radius:10px;}
+.more-acct{font:600 13.5px/1 var(--font-body);color:var(--ink-dim);margin:22px 0 12px;}
+.empty-day{text-align:center;color:var(--ink-faint);padding:30px 10px;border:1px dashed var(--line);border-radius:16px;margin-bottom:12px;}
+/* expenses */
+.xp-card{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:16px;margin-bottom:14px;}
+.xp-row{display:flex;justify-content:space-between;gap:10px;}
+.xp-row>div{flex:1;min-width:0;}
+.xp-row>div:last-child{text-align:right;}
+.xp-row>div:nth-child(2){text-align:center;}
+.xp-row span{display:block;font-size:12px;color:var(--ink-faint);margin-bottom:6px;}
+.xp-row b{font:700 24px/1.1 var(--font-body);letter-spacing:-.01em;}
+.xp-budget{display:inline-flex;align-items:center;gap:2px;font:700 24px/1.1 var(--font-body);}
+.xp-budget i,.xp-amt i{font-style:normal;color:var(--ink-faint);font-weight:600;}
+.xp-budget input{width:74px;background:transparent;border:none;border-bottom:1px dashed var(--line);color:var(--ink);font:700 22px/1.1 var(--font-body);padding:0 0 2px;text-align:center;}
+.xp-bar{height:6px;border-radius:99px;background:rgba(224,176,79,.16);margin-top:14px;overflow:hidden;}
+.xp-bar i{display:block;height:100%;width:0;background:var(--gold);border-radius:99px;transition:width .4s ease;}
+.xp-bar.over i{background:var(--tulip);}
+.xp-form{display:flex;flex-direction:column;gap:10px;margin-bottom:20px;}
+.xp-f1,.xp-f2{display:flex;gap:10px;}
+.xp-form input,.xp-form select{background:var(--card);border:1px solid var(--line);color:var(--ink);border-radius:14px;padding:0 14px;min-height:48px;font:500 15px var(--font-body);min-width:0;}
+.xp-amt{display:flex;align-items:center;gap:4px;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:0 12px;width:120px;flex-shrink:0;}
+.xp-amt input{border:none;background:transparent;padding:0;width:100%;font-weight:700;min-height:46px;outline:none;}
+.xp-amt:focus-within,.xp-form select:focus,.xp-f1>input:focus{border-color:var(--gold);outline:none;}
+.xp-f1>input{flex:1;}
+.xp-f2 select{flex:1;}
+.xp-f2 .cta{min-width:84px;}
+.xp-day{margin-bottom:18px;}
+.xp-day h3{display:flex;justify-content:space-between;font:600 15px/1.2 var(--font-body);margin:0 0 8px;}
+.xp-day h3 span{color:var(--gold);}
+.xp-item{display:flex;align-items:center;gap:12px;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:11px 12px;margin-bottom:8px;}
+.xp-item .txt{flex:1;min-width:0;font-size:14.5px;}
+.xp-item .txt small{display:block;color:var(--ink-faint);font-size:12px;margin-top:3px;}
+.xp-item b{font:700 15px var(--font-body);}
+.xp-item button{appearance:none;border:none;background:transparent;color:var(--ink-faint);width:36px;height:36px;border-radius:50%;cursor:pointer;font-size:18px;}
+.xp-empty{text-align:center;color:var(--ink-faint);padding:26px 10px;border:1px dashed var(--line);border-radius:16px;}
+/* floating advisor button */
+.fab{position:fixed;right:16px;bottom:calc(76px + env(safe-area-inset-bottom,0px));width:52px;height:52px;border-radius:50%;border:none;background:var(--gold);color:#14100a;display:none;align-items:center;justify-content:center;box-shadow:0 8px 24px rgba(0,0,0,.5);z-index:29;cursor:pointer;}
+body[data-view="trips"] .fab,body[data-view="explore"] .fab,body[data-view="map"] .fab,body[data-view="expenses"] .fab{display:flex;}
+@media (min-width:520px){.fab{right:calc(50% - 230px + 14px);}}
 </style>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -564,26 +695,53 @@ h1.page-title{font-family:var(--font-head);font-weight:800;font-size:34px;line-h
 
   <!-- TRIP (home) -->
   <div class="view active" id="v-trips">
-    <div class="hero">
-      <h1 class="page-title hero-title">Istanbul</h1>
-      <p class="hero-meta">Fri Nov 6 to Sun Nov 8, 2026. Three travelers, staying at Premist Hotels Taksim. Flight home Sunday at 22:15 from Sabiha Gökçen.</p>
-      <div class="hero-count" id="trip-countdown"></div>
+    <header class="jhead">
+      <div>
+        <div class="eyebrow">ISTANBUL · NOVEMBER 2026</div>
+        <h1 class="jtitle">Your journey</h1>
+        <div class="jsub" id="j-sub">Friday, November 6 · Day 1 of 3</div>
+      </div>
+      <div class="jbadge" id="trip-countdown" aria-live="polite"></div>
+    </header>
+    <div class="daychips" id="plan-daynav" role="tablist" aria-label="Choose a day"></div>
+    <section class="overview" id="plan-stats" aria-label="Day overview"></section>
+    <div class="sched-head">
+      <h2>Your schedule</h2>
+      <button class="editday" id="plan-edit" type="button"></button>
     </div>
-    <div class="tilestrip" aria-hidden="true"></div>
-    <div class="nextup" id="next-up"></div>
-    <div class="trip-actions">
-      <button class="btn ghost" onclick="showTab('route')">Plan a journey</button>
-      <button class="btn ghost" onclick="showTab('plan')">Transit lines</button>
-    </div>
-    <div class="section-head" style="margin:6px 0 12px;"><h2>Itinerary</h2></div>
-    <div class="daynav" id="plan-daynav"></div>
-    <div class="hud-strip" id="plan-stats"></div>
-    <div id="plan-list" class="timeline"></div>
+    <div id="plan-list" class="ptl"></div>
+    <div id="plan-late"></div>
+    <div class="plan-foot" id="plan-foot"></div>
     <button class="addbar" id="plan-addbtn">
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
       Add a stop
     </button>
-    <div class="trip-stats-row" id="trip-stats" style="margin-top:22px;"></div>
+  </div>
+
+  <!-- EXPENSES -->
+  <div class="view" id="v-expenses">
+    <h1 class="page-title">Expenses</h1>
+    <p class="page-sub">Log what you spend and keep an eye on the trip budget, in euros.</p>
+    <div class="xp-card">
+      <div class="xp-row">
+        <div><span>Spent</span><b id="xp-total">€0</b></div>
+        <div><span>Budget</span><label class="xp-budget"><i>€</i><input id="xp-budget" type="number" inputmode="decimal" min="0" step="1" placeholder="Set" aria-label="Trip budget in euros"></label></div>
+        <div><span>Left</span><b id="xp-left">–</b></div>
+      </div>
+      <div class="xp-bar"><i id="xp-barfill"></i></div>
+    </div>
+    <form class="xp-form" id="xp-form" autocomplete="off">
+      <div class="xp-f1">
+        <label class="xp-amt"><i>€</i><input id="xp-amt" type="number" inputmode="decimal" min="0" step="0.01" placeholder="0.00" required aria-label="Amount in euros"></label>
+        <input id="xp-label" type="text" maxlength="60" placeholder="What was it?" aria-label="What was it?">
+      </div>
+      <div class="xp-f2">
+        <select id="xp-cat" aria-label="Category"><option>Food</option><option>Transport</option><option>Tickets</option><option>Shopping</option><option>Other</option></select>
+        <select id="xp-day" aria-label="Day"></select>
+        <button class="cta" type="submit">Add</button>
+      </div>
+    </form>
+    <div id="xp-days"></div>
   </div>
 
   <!-- PLAN -->
@@ -605,6 +763,7 @@ h1.page-title{font-family:var(--font-head);font-weight:800;font-size:34px;line-h
 
   <!-- ADVISOR -->
   <div class="view" id="v-advisor">
+    <button class="btn ghost backbtn" style="min-height:40px;margin-bottom:14px;" onclick="goBack()">Back</button>
     <h1 class="page-title">Advisor</h1>
     <p class="page-sub">Ask about your plan, or read the essentials before each day.</p>
     <div class="ask">
@@ -621,7 +780,14 @@ h1.page-title{font-family:var(--font-head);font-weight:800;font-size:34px;line-h
 
   <!-- ACCOUNT -->
   <div class="view" id="v-account">
-    <h1 class="page-title">Account</h1>
+    <h1 class="page-title">More</h1>
+    <div class="acct-group">
+      <h3>Tools</h3>
+      <div class="acct-row acct-row-go" data-go="advisor"><div class="ic">💬</div><div class="txt">Advisor<div class="sub">Ask about the plan, read the essentials</div></div><svg class="chev" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 6 15 12 9 18"/></svg></div>
+      <div class="acct-row acct-row-go" data-go="route"><div class="ic">🧭</div><div class="txt">Plan a journey<div class="sub">Transit route between two places</div></div><svg class="chev" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 6 15 12 9 18"/></svg></div>
+      <div class="acct-row acct-row-go" data-go="plan"><div class="ic">🚋</div><div class="txt">Transit lines<div class="sub">Tram, metro, ferry, funicular timetables</div></div><svg class="chev" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 6 15 12 9 18"/></svg></div>
+    </div>
+    <h2 class="more-acct">Account</h2>
 
     <!-- signed-out: auth forms -->
     <div id="auth-guest">
@@ -663,6 +829,7 @@ h1.page-title{font-family:var(--font-head);font-weight:800;font-size:34px;line-h
     </div>
   </div>
 
+  <button class="fab" id="fab-advisor" type="button" aria-label="Ask the advisor" onclick="showTab('advisor')"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 5h14a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2h-7l-5 4v-4H5a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2z"/></svg></button>
   <div class="tabbar">
     <div class="tabbar-inner" id="tabbar"></div>
   </div>
@@ -1469,7 +1636,16 @@ var STOP_BY_ID = {};
 ALL_STOPS.forEach(function(s){ STOP_BY_ID[s.id] = s; });
 
 /* ---------- persisted plan state (per-viewer only) ---------- */
-var state = { added:{}, order:{}, times:{} };
+var state = { added:{}, order:{}, times:{}, done:{}, notes:{}, exp:[], budget:0 };
+function ensureState(){
+  if (!state.added) state.added = {};
+  if (!state.order) state.order = {};
+  if (!state.times) state.times = {};
+  if (!state.done) state.done = {};
+  if (!state.notes) state.notes = {};
+  if (!Array.isArray(state.exp)) state.exp = [];
+  if (typeof state.budget !== 'number') state.budget = 0;
+}
 (function initState(){
   ORDER.forEach(function(day){
     state.order[day] = TRIP[day].map(function(s){ return s.id; });
@@ -1482,6 +1658,10 @@ var state = { added:{}, order:{}, times:{} };
       if (saved && saved.added) state.added = saved.added;
       if (saved && saved.order) state.order = saved.order;
       if (saved && saved.times) state.times = saved.times;
+      if (saved && saved.done) state.done = saved.done;
+      if (saved && saved.notes) state.notes = saved.notes;
+      if (saved && Array.isArray(saved.exp)) state.exp = saved.exp;
+      if (saved && typeof saved.budget === 'number') state.budget = saved.budget;
     }
   }catch(e){}
 })();
@@ -1539,12 +1719,12 @@ function move(day, id, dir){
 /* ---------- tab switching ---------- */
 var TABS = [
   { id:'trips', label:'Plan', icon:'<rect x="3" y="5" width="18" height="16" rx="3"/><path d="M3 10h18M8 3v4M16 3v4"/>' },
-  { id:'explore', label:'Explore', icon:'<circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>' },
+  { id:'explore', label:'Discover', icon:'<circle cx="12" cy="12" r="9"/><polygon points="15.5 8.5 13.5 13.5 8.5 15.5 10.5 10.5 15.5 8.5"/>' },
   { id:'map', label:'Map', icon:'<path d="M9 4L3 6.500v13L9 17l6 3 6-2.500v-13L15 7zM9 4v13M15 7v13"/>' },
-  { id:'advisor', label:'Advisor', icon:'<path d="M5 5h14a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2h-7l-5 4v-4H5a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2z"/>' },
-  { id:'account', label:'Account', icon:'<circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.400 3.600-7 8-7s8 2.600 8 7"/>' }
+  { id:'expenses', label:'Expenses', icon:'<path d="M3 7a2 2 0 0 1 2-2h12v4"/><path d="M3 7v11a2 2 0 0 0 2 2h14a1 1 0 0 0 1-1v-9a1 1 0 0 0-1-1H5a2 2 0 0 1-2-2z"/><circle cx="16.500" cy="14.500" r="1"/>' },
+  { id:'account', label:'More', icon:'<path d="M4 7h16M4 12h16M4 17h10"/>' }
 ];
-var PARENT_TAB = { route:'map', plan:'trips' };
+var PARENT_TAB = { route:'map', plan:'account', advisor:'account' };
 var tabHistory = ['trips'];
 window.goBack = function(){ var t = tabHistory.length > 1 ? tabHistory[tabHistory.length - 2] : 'trips'; showTab(t, true); };
 var tabbar = document.getElementById('tabbar');
@@ -1567,7 +1747,11 @@ window.showTab = function(id, isBack){
   if (id === 'map') setTimeout(renderMap, 0);
   if (id === 'route') setTimeout(function(){ renderRouteBar(); renderRouteLastCard(); }, 0);
   if (id === 'advisor') renderAdvisor();
+  if (id === 'expenses') renderExpenses();
+  document.body.setAttribute('data-view', id);
 };
+document.body.setAttribute('data-view', 'trips');
+Array.prototype.forEach.call(document.querySelectorAll('[data-go]'), function(r){ r.addEventListener('click', function(){ showTab(r.getAttribute('data-go')); }); });
 
 /* ---------- EXPLORE ---------- */
 var RAILS = [
@@ -2018,19 +2202,14 @@ function chooseAsDestination(place){
 /* ---------- TRIPS ---------- */
 function renderTrips(){
   var total = ALL_STOPS.filter(function(s){ return state.added[s.id]; }).length;
-  var el2 = document.getElementById('trip-stats');
-  el2.innerHTML =
-    '<div class="stat"><b>3</b><span>Days</span></div>' +
-    '<div class="stat"><b>'+total+'</b><span>Stops planned</span></div>' +
-    '<div class="stat"><b>3</b><span>Travelers</span></div>';
   var cd = document.getElementById('trip-countdown');
   if (cd) {
     var now = new Date(), start = new Date(2026, 10, 6), end = new Date(2026, 10, 9);
     var d0 = new Date(now.getFullYear(), now.getMonth(), now.getDate());
     var days = Math.round((start - d0) / 86400000);
-    cd.innerHTML = now >= end ? 'Trip complete. Open any place to see your photos.'
-      : days > 0 ? '<b>' + days + '</b>' + (days === 1 ? ' day to go' : ' days to go')
-      : '<b>Day ' + (1 - days) + '</b> of 3, today';
+    cd.innerHTML = now >= end ? '<b>✓</b>done'
+      : days > 0 ? '<b>' + days + '</b>' + (days === 1 ? 'day to go' : 'days to go')
+      : '<b>Day ' + (1 - days) + '</b>of 3';
   }
   renderNextUp();
 }
@@ -2062,17 +2241,29 @@ function renderNextUp(){
 }
 
 /* ---------- PLAN (day timeline: pacing + walk time between stops) ---------- */
-var planDay = "Day 1";
+var planDay = (function(){ var n = new Date(), d0 = new Date(n.getFullYear(), n.getMonth(), n.getDate()); var i = Math.round((d0 - new Date(2026, 10, 6)) / 86400000); return (i >= 0 && i <= 2) ? ORDER[i] : 'Day 1'; })();
+var planEdit = false;
+var planOpen = {};
+var planMenu = {};
+var DOW = ['SUN','MON','TUE','WED','THU','FRI','SAT'];
 function renderPlanDayNav(){
   var nav = document.getElementById('plan-daynav');
   nav.innerHTML = '';
-  ORDER.forEach(function(day){
+  ORDER.forEach(function(day, i){
+    var d = new Date(2026, 10, 6 + i);
     var b = document.createElement('button');
-    b.textContent = day;
+    b.type = 'button';
+    b.setAttribute('role', 'tab');
+    b.setAttribute('aria-selected', day === planDay ? 'true' : 'false');
+    b.innerHTML = '<b>' + String(d.getDate()).padStart(2, '0') + '</b><span>' + DOW[d.getDay()] + ' · ' + day.toUpperCase() + '</span>';
     if (day === planDay) b.className = 'active';
-    b.addEventListener('click', function(){ planDay = day; renderPlan(); });
+    b.addEventListener('click', function(){ planDay = day; planEdit = false; renderPlan(); });
     nav.appendChild(b);
   });
+  var di = ORDER.indexOf(planDay), dd = new Date(2026, 10, 6 + di);
+  var names = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+  var sub = document.getElementById('j-sub');
+  if (sub) sub.textContent = names[dd.getDay()] + ', November ' + dd.getDate() + ' · Day ' + (di + 1) + ' of 3';
 }
 function planHaversineM(lat1, lng1, lat2, lng2){
   var R = 6371000, toRad = function(d){ return d*Math.PI/180; };
@@ -3157,97 +3348,244 @@ function planTimeDiffMin(t1, t2){
   var diff = mb - ma;
   return diff < 0 ? null : diff;
 }
+var SVG_WALK = '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="13" cy="4.500" r="1.800"/><path d="M9 21l2.500-6-2.500-2 1-5 3-1 2.500 3 3 1M11.500 15l3 2 1 4"/></svg>';
+var SVG_CHK = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.600" stroke-linecap="round" stroke-linejoin="round"><polyline points="5 12.500 10 17.500 19 7.500"/></svg>';
+var SVG_DOTS = '<svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><circle cx="5" cy="12" r="1.800"/><circle cx="12" cy="12" r="1.800"/><circle cx="19" cy="12" r="1.800"/></svg>';
+function planNowMin(){ var n = new Date(); return n.getHours() * 60 + n.getMinutes(); }
+function planTodayIdx(){ var n = new Date(), d0 = new Date(n.getFullYear(), n.getMonth(), n.getDate()); return Math.round((d0 - new Date(2026, 10, 6)) / 86400000); }
+function hhmmToMin(t){ var m = /(\d{1,2}):(\d{2})/.exec(t || ''); return m ? (+m[1]) * 60 + (+m[2]) : null; }
+function minToHHMM(m){ m = Math.max(0, Math.min(23 * 60 + 59, m)); return String(Math.floor(m / 60)).padStart(2, '0') + ':' + String(m % 60).padStart(2, '0'); }
+/* done / next / delayed / upcoming for every stop of a day. "Next" and "Delayed" only apply on the live day
+   (today, or Day 1 before the trip starts); the other days read as upcoming. */
+function planStates(day, ids){
+  var res = {}, di = ORDER.indexOf(day), ti = planTodayIdx();
+  var live = (ti >= 0 && ti <= 2) ? (ti === di) : (di === 0);
+  var past = ti > di;
+  var nowM = planNowMin(), nextSet = false;
+  ids.forEach(function(id){
+    var s = STOP_BY_ID[id];
+    if (state.done[id]) { res[id] = 'done'; return; }
+    var tm = hhmmToMin(stopTime(s));
+    var late = (past || (ti === di && tm != null && tm + 20 < nowM));
+    if (late) { res[id] = 'delayed'; return; }
+    if (live && !nextSet) { res[id] = 'next'; nextSet = true; return; }
+    res[id] = 'upcoming';
+  });
+  return res;
+}
+var STATE_LABEL = { done:'Completed', next:'Next', delayed:'Delayed', upcoming:'Upcoming' };
+function mapsDir(s){ return 'https://www.google.com/maps/dir/?api=1&destination=' + s.lat + ',' + s.lng + '&travelmode=' + (prefs.directionsMode || 'walking'); }
+function planGapHtml(s, next, planned){
+  var parts = [], tight = '';
+  if (s.lat && s.lng && next.lat && next.lng) {
+    var meters = planHaversineM(s.lat, s.lng, next.lat, next.lng);
+    var mins = Math.max(1, Math.round(meters / 70));
+    var dist = meters >= 1000 ? (meters / 1000).toFixed(1) + ' km' : meters < 40 ? 'right here' : Math.round(meters / 10) * 10 + ' m';
+    var sug = null;
+    try { sug = transitSuggestion(s, next, meters); } catch (e) {}
+    if (sug && sug.segments && sug.segments.length) {
+      parts.push('<span>' + sug.icon + '</span><span><em>' + escapeHtml(sug.label) + '</em> · ' + escapeHtml(sug.route) + ' · ' + dist + '</span>');
+    } else if (sug && sug.noHub) {
+      parts.push('<span>🚕</span><span><em>Taxi or bus</em> · ' + dist + '</span>');
+    } else {
+      parts.push(SVG_WALK + '<span><em>' + mins + ' min walk</em> · ' + dist + '</span>');
+    }
+  }
+  var gap = planTimeDiffMin(stopTime(s), stopTime(next));
+  if (gap != null && gap < 15) tight = '<span class="tight">Tight, ' + gap + ' min</span>';
+  return '<div class="pn-time"></div><div class="pn-gapchip">' + (parts.join('') || '<span>→</span>') + tight + '</div>';
+}
 function renderPlan(){
   renderPlanDayNav();
   renderTransitLines();
   renderAllLines();
+  ensureState();
   var ids = addedIdsForDay(planDay);
+  var states = planStates(planDay, ids);
 
-  var totalWalkM = 0, legCount = 0;
-  for (var gi=0; gi<ids.length-1; gi++){
-    var ga = STOP_BY_ID[ids[gi]], gb = STOP_BY_ID[ids[gi+1]];
-    if (ga.lat && ga.lng && gb.lat && gb.lng) { totalWalkM += planHaversineM(ga.lat,ga.lng,gb.lat,gb.lng); legCount++; }
+  var totalWalkM = 0;
+  for (var gi = 0; gi < ids.length - 1; gi++){
+    var ga = STOP_BY_ID[ids[gi]], gb = STOP_BY_ID[ids[gi + 1]];
+    if (ga.lat && ga.lng && gb.lat && gb.lng) totalWalkM += planHaversineM(ga.lat, ga.lng, gb.lat, gb.lng);
   }
-  var walkMins = Math.round(totalWalkM/70); // ~70m/min casual city walking pace
-  var pace = !ids.length ? null : (ids.length<=5 ? 'relaxed' : ids.length<=9 ? 'balanced' : 'packed');
-  var paceLabel = { relaxed:'Relaxed', balanced:'Balanced', packed:'Packed' }[pace];
-
+  var doneN = ids.filter(function(id){ return states[id] === 'done'; }).length;
+  var pct = ids.length ? Math.round(doneN / ids.length * 100) : 0;
+  var ti = planTodayIdx(), isToday = ti === ORDER.indexOf(planDay);
   document.getElementById('plan-stats').innerHTML =
-    '<div class="hud-cell"><b>'+String(ids.length).padStart(2,'0')+'</b><span>Stops</span></div>' +
-    '<div class="hud-cell"><b>'+(ids.length?stopTime(STOP_BY_ID[ids[0]]):'--:--')+'</b><span>Start</span></div>' +
-    '<div class="hud-cell"><b>'+(ids.length?stopTime(STOP_BY_ID[ids[ids.length-1]]):'--:--')+'</b><span>End</span></div>' +
-    '<div class="hud-cell"><b>'+(legCount ? walkMins+'m' : '--')+'</b><span>Walk</span></div>' +
-    (pace ? '<div class="hud-cell pace-'+pace+'"><b>'+paceLabel.toUpperCase()+'</b><span>Pace</span></div>' : '');
+    '<div class="ov-top"><h3>' + (isToday ? "Today's overview" : planDay + ' overview') + '</h3><span class="ov-pill">' + ids.length + ' stops</span></div>' +
+    '<div class="ov-nums"><div><b>' + (ids.length ? stopTime(STOP_BY_ID[ids[0]]) : '--:--') + '</b><span>Start</span></div>' +
+    '<div><b>' + (ids.length ? stopTime(STOP_BY_ID[ids[ids.length - 1]]) : '--:--') + '</b><span>Finish</span></div>' +
+    '<div><b>' + (totalWalkM >= 1000 ? (totalWalkM / 1000).toFixed(1) + ' km' : Math.round(totalWalkM / 10) * 10 + ' m') + '</b><span>Between stops</span></div></div>' +
+    '<div class="ov-prog"><div class="ov-prog-row">YOUR DAY PROGRESS<em>' + doneN + ' / ' + ids.length + ' completed</em></div><div class="ov-bar"><i style="width:' + pct + '%"></i></div></div>';
+
+  var eb = document.getElementById('plan-edit');
+  eb.className = 'editday' + (planEdit ? ' on' : '');
+  eb.textContent = planEdit ? 'Done' : ids.length + ' activities · Edit day ✎';
+  eb.onclick = function(){ planEdit = !planEdit; renderPlan(); };
 
   var list = document.getElementById('plan-list');
   list.innerHTML = '';
+  list.className = 'ptl' + (planEdit ? ' edit-on' : '');
+  var foot = document.getElementById('plan-foot'), late = document.getElementById('plan-late');
+  late.innerHTML = '';
   if (!ids.length) {
-    list.innerHTML = '<div class="empty">Nothing in '+planDay+' yet — add a stop below.</div>';
+    list.innerHTML = '<div class="empty-day">Nothing in ' + planDay + ' yet. Add a stop below.</div>';
+    foot.innerHTML = '';
     return;
   }
   ids.forEach(function(id, i){
-    var s = STOP_BY_ID[id];
-    var node = document.createElement('div');
-    node.className = 'tnode' + (i===0 ? ' tfirst' : '') + (i===ids.length-1 ? ' tlast' : '');
+    var s = STOP_BY_ID[id], st = states[id];
+    var color = CAT_COLOR[s.cat] || '#888';
+    var nextStop = ids[i + 1] ? STOP_BY_ID[ids[i + 1]] : null;
+    var planned = nextStop ? planTimeDiffMin(stopTime(s), stopTime(nextStop)) : null;
+    var open = !!planOpen[id];
     var edited = !!(state.times && state.times[id]);
+    var hasThumb = bundledFor(s.n).length > 0;
+    var node = document.createElement('div');
+    node.className = 'pn state-' + st + (open ? ' pn-open' : '');
     node.innerHTML =
-      '<div class="trail"><div class="tdot">'+String(i+1).padStart(2,'0')+'</div></div>' +
-      '<div class="tcard">' +
-        '<div class="body">' +
-          '<div class="time-wrap'+(edited?' edited':'')+'"><span class="tbr">[</span><input type="time" class="time-edit" value="'+stopTime(s)+'" aria-label="Time for '+escapeHtml(s.n)+'"><span class="tbr">]</span>'+(edited?'<span class="time-reset" title="Reset to planned time">↺</span>':'')+'</div>' +
-          '<div class="name">'+s.n+'</div>' +
-          (s.note ? '<div class="note">'+s.note+'</div>' : '') +
+      '<div class="pn-time"><b>' + stopTime(s) + '</b><i class="pn-dot"></i></div>' +
+      '<div class="pn-card">' +
+        '<div class="pn-top">' +
+          '<span class="pn-cat" style="color:' + color + ';background:' + color + '26;">' + escapeHtml(s.cat) + '</span>' +
+          '<span class="pn-state st-' + st + '">' + STATE_LABEL[st] + '</span><span class="pn-spacer"></span>' +
+          '<button type="button" class="pn-icbtn check' + (state.done[id] ? ' on' : '') + '" aria-label="' + (state.done[id] ? 'Mark not visited' : 'Mark as visited') + '" aria-pressed="' + (state.done[id] ? 'true' : 'false') + '">' + SVG_CHK + '</button>' +
+          '<button type="button" class="pn-icbtn more" aria-label="Actions for ' + escapeHtml(s.n) + '" aria-expanded="' + (planMenu[id] ? 'true' : 'false') + '">' + SVG_DOTS + '</button>' +
         '</div>' +
-        '<div class="ctrls">' +
-          '<button class="up" '+(i===0?'disabled style="opacity:.35"':'')+'><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="18 15 12 9 6 15"/></svg></button>' +
-          '<button class="down" '+(i===ids.length-1?'disabled style="opacity:.35"':'')+'><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="6 9 12 15 18 9"/></svg></button>' +
-          '<button class="rm"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>' +
+        '<div class="pn-main" role="button" tabindex="0" aria-expanded="' + (open ? 'true' : 'false') + '">' +
+          '<div class="pn-text"><div class="pn-name">' + escapeHtml(s.n) + '</div>' +
+          (s.note ? '<div class="pn-desc">' + escapeHtml(s.note) + '</div>' : '') +
+          (planned ? '<div class="pn-meta"><span>⏱ ' + (planned >= 60 ? Math.floor(planned / 60) + ' h ' + (planned % 60 ? planned % 60 + ' min' : '') : planned + ' min') + ' planned</span></div>' : '') +
+          '</div>' +
+          (hasThumb ? '<img class="pn-thumb" data-w="240" alt="">' : '') +
+        '</div>' +
+        '<div class="pn-more">' +
+          '<div class="pn-acts">' +
+            (s.lat && s.lng ? '<a class="btn" target="_blank" rel="noopener" href="' + mapsDir(s) + '">Directions</a>' : '') +
+            '<button type="button" class="btn ghost act-detail">Details &amp; photos</button>' +
+            '<button type="button" class="btn ghost act-exp">Log expense</button>' +
+          '</div>' +
+          '<textarea class="pn-note" maxlength="500" placeholder="Your notes and tips for this stop" aria-label="Notes for ' + escapeHtml(s.n) + '"></textarea>' +
+        '</div>' +
+        '<div class="pn-menu' + (planMenu[id] ? ' show' : '') + '">' +
+          '<input type="time" class="time-edit" value="' + stopTime(s) + '" aria-label="Time for ' + escapeHtml(s.n) + '">' +
+          (edited ? '<span class="time-reset" role="button" aria-label="Reset to planned time" title="Reset to planned time">↺</span>' : '') +
+          '<button type="button" class="btn ghost up"' + (i === 0 ? ' disabled' : '') + '>Move up</button>' +
+          '<button type="button" class="btn ghost down"' + (i === ids.length - 1 ? ' disabled' : '') + '>Move down</button>' +
+          '<button type="button" class="btn ghost danger rm">Remove</button>' +
         '</div>' +
       '</div>';
+    var toggle = function(){ planOpen[id] = !planOpen[id]; renderPlan(); };
+    var mainEl = node.querySelector('.pn-main');
+    mainEl.addEventListener('click', toggle);
+    mainEl.addEventListener('keydown', function(e){ if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggle(); } });
+    node.querySelector('.check').addEventListener('click', function(){
+      if (state.done[id]) delete state.done[id]; else state.done[id] = true;
+      persist(); renderPlan();
+    });
+    node.querySelector('.more').addEventListener('click', function(){ planMenu[id] = !planMenu[id]; renderPlan(); });
+    node.querySelector('.act-detail').addEventListener('click', function(){ openDetail(id); });
+    node.querySelector('.act-exp').addEventListener('click', function(){ xpPrefill = { label:s.n, day:planDay }; showTab('expenses'); });
+    var note = node.querySelector('.pn-note');
+    note.value = state.notes[id] || '';
+    note.addEventListener('change', function(){ if (note.value.trim()) state.notes[id] = note.value; else delete state.notes[id]; persist(); });
     node.querySelector('.up').addEventListener('click', function(){ move(planDay, id, -1); });
     node.querySelector('.down').addEventListener('click', function(){ move(planDay, id, 1); });
     node.querySelector('.rm').addEventListener('click', function(){ state.added[id] = false; persist(); renderAll(); });
-    node.querySelector('.time-edit').addEventListener('click', function(e){ e.stopPropagation(); });
     node.querySelector('.time-edit').addEventListener('change', function(e){
-      var v = e.target.value;
-      if (!v) return;
-      setStopTime(id, v);
-      persist();
-      renderPlan();
+      var v = e.target.value; if (!v) return;
+      setStopTime(id, v); persist(); renderPlan();
     });
     var resetBtn = node.querySelector('.time-reset');
-    if (resetBtn) resetBtn.addEventListener('click', function(e){
-      e.stopPropagation();
-      if (state.times) delete state.times[id];
-      persist();
-      renderPlan();
-    });
+    if (resetBtn) resetBtn.addEventListener('click', function(){ if (state.times) delete state.times[id]; persist(); renderPlan(); });
     list.appendChild(node);
-
-    if (i < ids.length - 1) {
-      var next = STOP_BY_ID[ids[i+1]];
-      var parts = [];
-      var warnClass = '';
-      var meters = 0;
-      if (s.lat && s.lng && next.lat && next.lng) {
-        meters = planHaversineM(s.lat, s.lng, next.lat, next.lng);
-        var mins = Math.max(1, Math.round(meters/70));
-        parts.push('WALK ' + mins + 'm · ' + (meters>=1000 ? (meters/1000).toFixed(1)+'km' : Math.round(meters)+'m'));
-      }
-      var gapMins = planTimeDiffMin(stopTime(s), stopTime(next));
-      if (gapMins != null) {
-        if (gapMins < 15) { warnClass = 'warn-tight'; parts.push('+'+gapMins+'m · TIGHT'); }
-        else if (gapMins > 90) { warnClass = 'warn-long'; parts.push('+'+Math.round(gapMins/60*10)/10+'h FREE'); }
-        else { parts.push('+'+gapMins+'m'); }
-      }
-      var gapEl = document.createElement('div');
-      gapEl.className = 'tgap' + (warnClass ? ' '+warnClass : '');
-      var chipHtml = '<span class="tgap-txt">'+(parts.length?parts.join(' &nbsp;·&nbsp; '):'—')+'</span>';
-      gapEl.innerHTML = '<div class="trail"><div class="tdot-sm"></div></div><div class="tgap-chip">'+chipHtml+'</div>';
-      list.appendChild(gapEl);
+    if (hasThumb) loadRealPhoto(node.querySelector('.pn-thumb'), s.n);
+    if (nextStop) {
+      var g = document.createElement('div');
+      g.className = 'pn-gap';
+      g.innerHTML = planGapHtml(s, nextStop, planned);
+      list.appendChild(g);
     }
   });
+
+  // running-late helper: only when something on the live day is overdue
+  var delayed = ids.filter(function(id){ return states[id] === 'delayed'; });
+  if (delayed.length && isToday) {
+    late.innerHTML = '<div class="late-card"><p>' + delayed.length + (delayed.length === 1 ? ' stop is' : ' stops are') + ' behind schedule. Tick what you visited, or push the rest back.</p><button type="button" class="btn ghost" id="plan-shift">Shift +15 min</button></div>';
+    document.getElementById('plan-shift').addEventListener('click', function(){
+      ids.forEach(function(id){ if (!state.done[id]) { var m = hhmmToMin(stopTime(STOP_BY_ID[id])); if (m != null) setStopTime(id, minToHHMM(m + 15)); } });
+      persist(); renderPlan();
+    });
+  }
+
+  var nextId = ids.filter(function(id){ return states[id] === 'next'; })[0] || ids.filter(function(id){ return states[id] === 'delayed'; })[0];
+  var ns = nextId ? STOP_BY_ID[nextId] : null;
+  foot.innerHTML = ns && ns.lat && ns.lng
+    ? '<div class="cont"><span>Continue to your next stop</span><span>↓</span></div><a class="cta" target="_blank" rel="noopener" href="' + mapsDir(ns) + '"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><polygon points="3 11 22 2 13 21 11 13 3 11"/></svg>Start today\'s route</a>'
+    : '<div class="cont"><span>' + (doneN === ids.length ? 'All done for this day' : 'Nothing left to navigate to') + '</span><span></span></div>';
 }
+
+/* ---------- EXPENSES (euros, per viewer; synced with the plan when signed in) ---------- */
+var xpPrefill = null;
+function eur(n){ return '€' + (Math.round(n * 100) / 100).toLocaleString('en', { minimumFractionDigits: n % 1 ? 2 : 0, maximumFractionDigits: 2 }); }
+function renderExpenses(){
+  ensureState();
+  var total = state.exp.reduce(function(a, e){ return a + e.amt; }, 0);
+  document.getElementById('xp-total').textContent = eur(total);
+  var bud = document.getElementById('xp-budget');
+  if (document.activeElement !== bud) bud.value = state.budget ? state.budget : '';
+  var left = document.getElementById('xp-left');
+  left.textContent = state.budget ? eur(state.budget - total) : '–';
+  left.style.color = state.budget && total > state.budget ? 'var(--tulip)' : '';
+  var barWrap = document.getElementById('xp-barfill').parentNode;
+  barWrap.className = 'xp-bar' + (state.budget && total > state.budget ? ' over' : '');
+  document.getElementById('xp-barfill').style.width = (state.budget ? Math.min(100, total / state.budget * 100) : 0) + '%';
+  var sel = document.getElementById('xp-day');
+  if (!sel.options.length) ORDER.forEach(function(d, i){ var o = document.createElement('option'); o.value = d; o.textContent = d; sel.appendChild(o); });
+  if (xpPrefill) {
+    document.getElementById('xp-label').value = xpPrefill.label || '';
+    sel.value = xpPrefill.day || sel.value;
+    xpPrefill = null;
+  } else if (!sel.dataset.set) { sel.value = planDay; sel.dataset.set = '1'; }
+  var wrap = document.getElementById('xp-days');
+  wrap.innerHTML = '';
+  if (!state.exp.length) { wrap.innerHTML = '<div class="xp-empty">No expenses yet. Add the first one above.</div>'; return; }
+  ORDER.forEach(function(day){
+    var items = state.exp.filter(function(e){ return e.day === day; });
+    if (!items.length) return;
+    var sum = items.reduce(function(a, e){ return a + e.amt; }, 0);
+    var sec = document.createElement('div');
+    sec.className = 'xp-day';
+    sec.innerHTML = '<h3>' + day + ' · ' + DAY_DATE[day] + '<span>' + eur(sum) + '</span></h3>';
+    items.slice().reverse().forEach(function(e){
+      var row = document.createElement('div');
+      row.className = 'xp-item';
+      row.innerHTML = '<div class="txt"></div><b>' + eur(e.amt) + '</b><button type="button" aria-label="Delete expense">×</button>';
+      row.querySelector('.txt').innerHTML = escapeHtml(e.label || e.cat) + '<small>' + escapeHtml(e.cat) + '</small>';
+      row.querySelector('button').addEventListener('click', function(){
+        state.exp = state.exp.filter(function(x){ return x.id !== e.id; });
+        persist(); renderExpenses();
+      });
+      sec.appendChild(row);
+    });
+    wrap.appendChild(sec);
+  });
+}
+document.getElementById('xp-form').addEventListener('submit', function(ev){
+  ev.preventDefault();
+  var amt = parseFloat(document.getElementById('xp-amt').value);
+  if (!(amt > 0)) return;
+  ensureState();
+  state.exp.push({ id:'e' + Date.now().toString(36) + Math.random().toString(36).slice(2, 5), day:document.getElementById('xp-day').value, cat:document.getElementById('xp-cat').value, label:document.getElementById('xp-label').value.trim(), amt:Math.round(amt * 100) / 100, ts:Date.now() });
+  document.getElementById('xp-amt').value = '';
+  document.getElementById('xp-label').value = '';
+  persist(); renderExpenses();
+});
+document.getElementById('xp-budget').addEventListener('change', function(e){
+  var v = parseFloat(e.target.value);
+  state.budget = v > 0 ? v : 0;
+  persist(); renderExpenses();
+});
 
 document.getElementById('plan-addbtn').addEventListener('click', function(){ openPicker(); });
 
@@ -3663,6 +4001,7 @@ function loadCloudPlan(user){
     if (res.error) return;
     if (res.data && res.data.data && res.data.data.added) {
       state = res.data.data;
+      ensureState();
       try{ localStorage.setItem('wayfare_plan_v1', JSON.stringify(state)); }catch(e){}
       renderAll();
     } else {
@@ -3697,6 +4036,7 @@ function renderAll(){
   renderExplore();
   renderTrips();
   renderPlan();
+  renderExpenses();
   if (document.getElementById('v-map').classList.contains('active')) renderMap();
 }
 renderAll();

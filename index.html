@@ -571,6 +571,17 @@ h1.page-title{font-family:var(--font-head);font-weight:800;font-size:34px;line-h
 .pn-gapchip em{font-style:normal;color:var(--ink);font-weight:600;}
 .pn-gapchip .tight{color:var(--tulip);font-weight:700;}
 .pn-gapchip svg{flex-shrink:0;color:var(--gold);}
+
+.rain-row{margin:-8px 0 18px;}
+.rainchip{appearance:none;display:flex;align-items:center;gap:10px;width:100%;min-height:48px;background:var(--card2);border:1px solid var(--line);color:var(--ink);border-radius:14px;padding:0 14px;font:600 14px var(--font-body);cursor:pointer;text-align:left;}
+.rainchip span.sw{margin-left:auto;width:38px;height:22px;border-radius:99px;background:rgba(255,255,255,.14);position:relative;flex-shrink:0;transition:background .2s;}
+.rainchip span.sw::after{content:"";position:absolute;top:3px;left:3px;width:16px;height:16px;border-radius:50%;background:#fff;transition:transform .2s;}
+.rainchip[aria-pressed="true"]{border-color:rgba(76,141,255,.6);background:rgba(76,141,255,.1);}
+.rainchip[aria-pressed="true"] span.sw{background:var(--iznik);}
+.rainchip[aria-pressed="true"] span.sw::after{transform:translateX(16px);}
+.rain-note{margin:10px 2px 0;font-size:12.5px;line-height:1.5;color:var(--ink-dim);}
+.pn.is-rain .pn-card{border-style:dashed;}
+.rain-on .addbar{display:none;}
 .late-card{display:flex;align-items:center;gap:12px;background:rgba(240,88,75,.08);border:1px solid rgba(240,88,75,.35);border-radius:16px;padding:12px 14px;margin:6px 0 14px;}
 .late-card p{margin:0;flex:1;font-size:13px;line-height:1.4;color:var(--ink-dim);}
 .late-card .btn{min-height:40px;font-size:13px;padding:0 14px;white-space:nowrap;}
@@ -705,6 +716,10 @@ body[data-view="trips"] .fab,body[data-view="explore"] .fab,body[data-view="map"
     </header>
     <div class="daychips" id="plan-daynav" role="tablist" aria-label="Choose a day"></div>
     <section class="overview" id="plan-stats" aria-label="Day overview"></section>
+    <div class="rain-row">
+      <button class="rainchip" id="plan-rain" type="button" aria-pressed="false"></button>
+      <p class="rain-note" id="rain-note" hidden></p>
+    </div>
     <div class="sched-head">
       <h2>Your schedule</h2>
       <button class="editday" id="plan-edit" type="button"></button>
@@ -1636,13 +1651,14 @@ var STOP_BY_ID = {};
 ALL_STOPS.forEach(function(s){ STOP_BY_ID[s.id] = s; });
 
 /* ---------- persisted plan state (per-viewer only) ---------- */
-var state = { added:{}, order:{}, times:{}, done:{}, notes:{}, exp:[], budget:0 };
+var state = { added:{}, order:{}, times:{}, done:{}, notes:{}, exp:[], budget:0, rain:{} };
 function ensureState(){
   if (!state.added) state.added = {};
   if (!state.order) state.order = {};
   if (!state.times) state.times = {};
   if (!state.done) state.done = {};
   if (!state.notes) state.notes = {};
+  if (!state.rain) state.rain = {};
   if (!Array.isArray(state.exp)) state.exp = [];
   if (typeof state.budget !== 'number') state.budget = 0;
 }
@@ -1660,6 +1676,7 @@ function ensureState(){
       if (saved && saved.times) state.times = saved.times;
       if (saved && saved.done) state.done = saved.done;
       if (saved && saved.notes) state.notes = saved.notes;
+      if (saved && saved.rain) state.rain = saved.rain;
       if (saved && Array.isArray(saved.exp)) state.exp = saved.exp;
       if (saved && typeof saved.budget === 'number') state.budget = saved.budget;
     }
@@ -1687,6 +1704,7 @@ function notAddedForDay(day){
   return ALL_STOPS.filter(function(s){ return s.day === day && !state.added[s.id]; });
 }
 function toggleAdd(id, day){
+  if (STOP_BY_ID[id] && STOP_BY_ID[id].rain) return;
   if (state.added[id]) {
     state.added[id] = false;
   } else {
@@ -3355,6 +3373,49 @@ function planNowMin(){ var n = new Date(); return n.getHours() * 60 + n.getMinut
 function planTodayIdx(){ var n = new Date(), d0 = new Date(n.getFullYear(), n.getMonth(), n.getDate()); return Math.round((d0 - new Date(2026, 10, 6)) / 86400000); }
 function hhmmToMin(t){ var m = /(\d{1,2}):(\d{2})/.exec(t || ''); return m ? (+m[1]) * 60 + (+m[2]) : null; }
 function minToHHMM(m){ m = Math.max(0, Math.min(23 * 60 + 59, m)); return String(Math.floor(m / 60)).padStart(2, '0') + ':' + String(m % 60).padStart(2, '0'); }
+/* ---------- RAIN PLAN: free indoor swaps, no paid museums or tickets ---------- */
+var RAIN = {
+  'Day 1': {
+    drop: ['d1-4','d1-5','d1-7','d1-10','d1-11'],
+    add: [
+      { id:'r1-1', t:'11:05', n:'Çiçek Pasajı & Atlas Pasajı', note:'Covered 19th-century passages just off İstiklal. Free, dry, good for a wander and a coffee.', lat:41.0339, lng:28.9775, cat:'Shopping' },
+      { id:'r1-2', t:'12:20', n:'SALT Galata', note:'Free exhibitions and a café in a former Ottoman bank building in Karaköy.', lat:41.0264, lng:28.9744, cat:'Culture' }
+    ]
+  },
+  'Day 2': {
+    drop: ['d2-0','d2-1','d2-6','d2-7','d2-8','d2-9'],
+    add: [
+      { id:'r2-0', t:'09:00', n:'Breakfast near Sultanahmet', note:'Start with a long Turkish breakfast in a warm café, then walk to the Blue Mosque when it opens to visitors.', lat:41.0053, lng:28.9770, cat:'Food' },
+      { id:'r2-1', t:'13:40', n:'Rüstem Pasha Mosque', note:'Small mosque above the Spice Bazaar, lined with Iznik tiles. Free; cover shoulders and knees and take your shoes off.', lat:41.0166, lng:28.9693, cat:'Culture' },
+      { id:'r2-2', t:'14:10', n:'Grand Bazaar', note:'Huge covered market, so you stay dry. Free to walk in; go early and keep bags zipped.', lat:41.0106, lng:28.9681, cat:'Market' },
+      { id:'r2-3', t:'16:30', n:'Mandabatmaz Turkish coffee', note:'Tiny coffee spot off İstiklal. Warm up here before the evening.', lat:41.0328, lng:28.9772, cat:'Food' }
+    ]
+  },
+  'Day 3': {
+    drop: ['d3-7'],
+    add: []
+  }
+};
+Object.keys(RAIN).forEach(function(day){
+  RAIN[day].add.forEach(function(s){ s.day = day; s.rain = true; s.extra = true; STOP_BY_ID[s.id] = s; });
+});
+var RAIN_NOTE = {
+  'Day 1': 'Rain plan: Museum of Innocence, Galata Tower, Kamondo Stairs, Arnavutköy and Ortaköy are swapped for free, covered stops.',
+  'Day 2': 'Rain plan: Hagia Sophia, Topkapı, Eyüp, Pierre Loti and Balat are swapped for free indoor stops. No paid museums.',
+  'Day 3': 'Rain plan: Otağtepe is dropped. The rest of the day is already on the Asian side around cafés and the market.'
+};
+function planIds(day){
+  var ids = addedIdsForDay(day);
+  if (!state.rain || !state.rain[day] || !RAIN[day]) return ids;
+  var drop = RAIN[day].drop;
+  ids = ids.filter(function(id){ return drop.indexOf(id) === -1; });
+  RAIN[day].add.forEach(function(s){
+    var pos = -1;
+    for (var k = 0; k < ids.length; k++) { var o = STOP_BY_ID[ids[k]]; if (o && stopTime(o) > stopTime(s)) { pos = k; break; } }
+    if (pos === -1) ids.push(s.id); else ids.splice(pos, 0, s.id);
+  });
+  return ids;
+}
 /* done / next / delayed / upcoming for every stop of a day. "Next" and "Delayed" only apply on the live day
    (today, or Day 1 before the trip starts); the other days read as upcoming. */
 function planStates(day, ids){
@@ -3400,8 +3461,15 @@ function renderPlan(){
   renderTransitLines();
   renderAllLines();
   ensureState();
-  var ids = addedIdsForDay(planDay);
+  var rainOn = !!(state.rain && state.rain[planDay]);
+  var ids = planIds(planDay);
   var states = planStates(planDay, ids);
+  var rb = document.getElementById('plan-rain'), rn = document.getElementById('rain-note');
+  rb.setAttribute('aria-pressed', rainOn ? 'true' : 'false');
+  rb.innerHTML = '<span aria-hidden="true">☔</span><span>Rain plan · free indoor swaps</span><span class="sw"></span>';
+  rb.onclick = function(){ state.rain[planDay] = !state.rain[planDay]; planEdit = false; persist(); renderPlan(); };
+  rn.hidden = !rainOn; rn.textContent = rainOn ? (RAIN_NOTE[planDay] || '') : '';
+  document.getElementById('v-trips').classList.toggle('rain-on', rainOn);
 
   var totalWalkM = 0;
   for (var gi = 0; gi < ids.length - 1; gi++){
@@ -3442,7 +3510,7 @@ function renderPlan(){
     var edited = !!(state.times && state.times[id]);
     var hasThumb = bundledFor(s.n).length > 0;
     var node = document.createElement('div');
-    node.className = 'pn state-' + st + (open ? ' pn-open' : '');
+    node.className = 'pn state-' + st + (open ? ' pn-open' : '') + (s.rain ? ' is-rain' : '');
     node.innerHTML =
       '<div class="pn-time"><b>' + stopTime(s) + '</b><i class="pn-dot"></i></div>' +
       '<div class="pn-card">' +
@@ -3470,9 +3538,10 @@ function renderPlan(){
         '<div class="pn-menu' + (planMenu[id] ? ' show' : '') + '">' +
           '<input type="time" class="time-edit" value="' + stopTime(s) + '" aria-label="Time for ' + escapeHtml(s.n) + '">' +
           (edited ? '<span class="time-reset" role="button" aria-label="Reset to planned time" title="Reset to planned time">↺</span>' : '') +
-          '<button type="button" class="btn ghost up"' + (i === 0 ? ' disabled' : '') + '>Move up</button>' +
-          '<button type="button" class="btn ghost down"' + (i === ids.length - 1 ? ' disabled' : '') + '>Move down</button>' +
-          '<button type="button" class="btn ghost danger rm">Remove</button>' +
+          (rainOn ? '' :
+            '<button type="button" class="btn ghost up"' + (i === 0 ? ' disabled' : '') + '>Move up</button>' +
+            '<button type="button" class="btn ghost down"' + (i === ids.length - 1 ? ' disabled' : '') + '>Move down</button>' +
+            '<button type="button" class="btn ghost danger rm">Remove</button>') +
         '</div>' +
       '</div>';
     var toggle = function(){ planOpen[id] = !planOpen[id]; renderPlan(); };
@@ -3489,9 +3558,11 @@ function renderPlan(){
     var note = node.querySelector('.pn-note');
     note.value = state.notes[id] || '';
     note.addEventListener('change', function(){ if (note.value.trim()) state.notes[id] = note.value; else delete state.notes[id]; persist(); });
-    node.querySelector('.up').addEventListener('click', function(){ move(planDay, id, -1); });
-    node.querySelector('.down').addEventListener('click', function(){ move(planDay, id, 1); });
-    node.querySelector('.rm').addEventListener('click', function(){ state.added[id] = false; persist(); renderAll(); });
+    if (!rainOn) {
+      node.querySelector('.up').addEventListener('click', function(){ move(planDay, id, -1); });
+      node.querySelector('.down').addEventListener('click', function(){ move(planDay, id, 1); });
+      node.querySelector('.rm').addEventListener('click', function(){ state.added[id] = false; persist(); renderAll(); });
+    }
     node.querySelector('.time-edit').addEventListener('change', function(e){
       var v = e.target.value; if (!v) return;
       setStopTime(id, v); persist(); renderPlan();

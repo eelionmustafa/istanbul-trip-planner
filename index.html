@@ -557,6 +557,8 @@ h1.page-title{font-family:var(--font-head);font-weight:800;font-size:34px;line-h
 .pn-acts{display:flex;gap:8px;flex-wrap:wrap;}
 .pn-acts .btn,.pn-acts a.btn{flex:1 1 auto;min-height:42px;font-size:13.5px;padding:0 14px;justify-content:center;text-align:center;}
 .pn-glyph{display:flex;align-items:center;justify-content:center;}
+.photo-credit{font-size:11px;color:var(--ink-faint);padding:6px 2px 0;line-height:1.4;}
+.photo-credit:empty{display:none;}
 .pn-note{display:block;width:100%;margin-top:12px;background:var(--bg);border:1px solid var(--line);border-radius:12px;color:var(--ink);font:400 14px/1.45 var(--font-body);padding:11px 12px;min-height:64px;resize:vertical;}
 .pn-note::placeholder{color:var(--ink-faint);}
 .pn-menu{display:none;margin-top:13px;padding-top:13px;border-top:1px solid var(--line);gap:8px;flex-wrap:wrap;align-items:center;}
@@ -1579,13 +1581,72 @@ function bundledFor(name){
   }
   return [];
 }
+var WIKI_CATS = { Culture:1, Landmark:1, Views:1, Market:1, Neighborhood:1, Water:1, Nature:1 };
+var WIKI_KEY = 'wf_wiki_v1';
+var wikiCache = (function(){ try { return JSON.parse(localStorage.getItem(WIKI_KEY) || '{}'); } catch (e) { return {}; } })();
+var STOP_BY_NAME = null;
+function stopByName(name){
+  if (!STOP_BY_NAME) { STOP_BY_NAME = {}; ALL_STOPS.forEach(function(s){ STOP_BY_NAME[s.n] = s; }); if (typeof RAIN !== 'undefined') Object.keys(RAIN).forEach(function(d){ RAIN[d].add.forEach(function(s){ STOP_BY_NAME[s.n] = s; }); }); }
+  return STOP_BY_NAME[name] || null;
+}
+function wikiFold(t){ return String(t || '').toLowerCase().replace(/ı/g, 'i').normalize('NFD').replace(/[̀-ͯ]/g, ''); }
+/* Looks up a free-licensed photo on Wikimedia Commons by place name. Only used for landmarks, never for
+   restaurants (a name search could return the wrong venue). Result is cached per device. */
+function wikiPhoto(name, cb){
+  var st = stopByName(name);
+  if (!st || !WIKI_CATS[st.cat]) return cb(null);
+  if (Object.prototype.hasOwnProperty.call(wikiCache, name)) return cb(wikiCache[name] || null);
+  var base = name.split(/ [&\/—(]/)[0].trim();
+  var q = base + ' Istanbul';
+  var url = 'https://commons.wikimedia.org/w/api.php?action=query&format=json&origin=*&generator=search&gsrnamespace=6&gsrlimit=10&prop=imageinfo&iiprop=url|mime|size|extmetadata&iiurlwidth=800&gsrsearch=' + encodeURIComponent(q);
+  var done = false;
+  var timer = setTimeout(function(){ if (!done) { done = true; cb(null); } }, 6000);
+  fetch(url).then(function(r){ return r.json(); }).then(function(j){
+    if (done) return; done = true; clearTimeout(timer);
+    var pages = (j && j.query && j.query.pages) ? Object.keys(j.query.pages).map(function(k){ return j.query.pages[k]; }) : [];
+    pages.sort(function(x, y){ return (x.index || 0) - (y.index || 0); });
+    var words = wikiFold(base).split(/[^a-z0-9]+/).filter(function(w){ return w.length > 3 && w !== 'istanbul'; });
+    var pick = null;
+    for (var i = 0; i < pages.length && !pick; i++) {
+      var p = pages[i], ii = p.imageinfo && p.imageinfo[0];
+      if (!ii || ii.mime !== 'image/jpeg' || (ii.width || 0) < 800) continue;
+      var title = wikiFold(p.title);
+      if (/map|plan|logo|flag|coat|diagram|poster|scan|stamp|drawing|painting|engraving|panorama|interior of|poster|book/.test(title)) continue;
+      if (words.length && !words.some(function(w){ return title.indexOf(w) >= 0; })) continue;
+      pick = ii;
+    }
+    var res = null;
+    if (pick) {
+      var md = pick.extmetadata || {};
+      var artist = String((md.Artist && md.Artist.value) || '').replace(/<[^>]*>/g, '').trim();
+      var lic = String((md.LicenseShortName && md.LicenseShortName.value) || '').replace(/<[^>]*>/g, '').trim();
+      res = { url: pick.thumburl || pick.url, credit: 'Photo: ' + (artist || 'Wikimedia Commons contributor') + (lic ? ', ' + lic : '') + ', via Wikimedia Commons' };
+    }
+    wikiCache[name] = res || 0;
+    try { localStorage.setItem(WIKI_KEY, JSON.stringify(wikiCache)); } catch (e) {}
+    cb(res);
+  }).catch(function(){ if (!done) { done = true; clearTimeout(timer); cb(null); } });
+}
+var placePhotoDown = false;
 function loadRealPhoto(imgEl, placeName){
   if (!imgEl) return;
   var own = bundledFor(placeName);
   if (own.length) { imgEl.onload = function(){ imgEl.classList.add('loaded'); }; imgEl.onerror = function(){ imgEl.remove(); }; imgEl.src = own[0]; return; }
+  function viaWiki(){
+    wikiPhoto(placeName, function(res){
+      if (!res) { imgEl.remove(); return; }
+      imgEl.onload = function(){
+        imgEl.classList.add('loaded');
+        if (imgEl.id === 'detail-photo') { var c = document.getElementById('detail-credit'); if (c) c.textContent = res.credit; }
+      };
+      imgEl.onerror = function(){ imgEl.remove(); };
+      imgEl.src = res.url;
+    });
+  }
+  if (placePhotoDown) return viaWiki();
   var url = FUNCTIONS_URL + '/place-photo?query=' + encodeURIComponent(placeName) + '&maxwidth=' + (imgEl.dataset.w || 500);
   imgEl.onload = function(){ imgEl.classList.add('loaded'); };
-  imgEl.onerror = function(){ imgEl.remove(); }; // no photo service configured yet, or lookup failed — keep the gradient/icon look
+  imgEl.onerror = function(){ placePhotoDown = true; viaWiki(); }; // Google lookup not configured or failed: try free Commons photos
   imgEl.src = url;
 }
 
@@ -1627,6 +1688,16 @@ var DAY_COLOR = { "Day 1":"#4F7DFA", "Day 2":"#FF5A5F", "Day 3":"#9B5DE5" };
    Explore and addable to a day's Plan. Each carries a suggested day/time so
    adding one drops it into the timeline in roughly the right place. */
 var EXTRAS = [
+  { id:'x2-tunel', day:'Day 1', t:'13:15', n:'Tünel Funicular, Karaköy to Beyoğlu', note:'One of the oldest underground railways in the world (1875). A short, cheap ride that kids enjoy.', lat:41.0249, lng:28.9743, cat:'Landmark', extra:true },
+  { id:'x2-ortakoymosque', day:'Day 1', t:'19:20', n:'Ortaköy Mosque', note:'Neo-baroque mosque right on the Bosphorus with the bridge behind it, the classic dusk photo. Free, outside prayer times.', lat:41.0475, lng:29.0272, cat:'Landmark', extra:true },
+  { id:'x2-bebek', day:'Day 1', t:'19:00', n:'Bebek waterfront', note:'Calm Bosphorus promenade with cafés, known for its almond-paste shop.', lat:41.0766, lng:29.0431, cat:'Neighborhood', extra:true },
+  { id:'x2-gulhane', day:'Day 2', t:'10:40', n:'Gülhane Park', note:'Shady historic park below Topkapı. Free, and a good calm break with a 10-year-old.', lat:41.0131, lng:28.9811, cat:'Nature', extra:true },
+  { id:'x2-yenicami', day:'Day 2', t:'13:05', n:'Yeni Cami (New Mosque), Eminönü', note:'Large 17th-century mosque on the Eminönü waterfront, free to visit outside prayer times.', lat:41.0166, lng:28.9709, cat:'Culture', extra:true },
+  { id:'x2-hamdi', day:'Day 2', t:'13:30', n:'Hamdi Restaurant, Eminönü', note:'Well-known kebab restaurant with a Golden Horn terrace. Check the menu prices before you sit.', lat:41.0176, lng:28.9700, cat:'Food', extra:true },
+  { id:'x2-galatabridge', day:'Day 2', t:'14:00', n:'Galata Bridge & the fishermen', note:'Walk across for Golden Horn views. The fish restaurants underneath tend to be pricey.', lat:41.0203, lng:28.9737, cat:'Landmark', extra:true },
+  { id:'x2-hafiz', day:'Day 2', t:'16:10', n:'Hafız Mustafa 1864 (sweets)', note:'Baklava, lokum and desserts. Several branches, including near Sirkeci and on İstiklal.', lat:41.0152, lng:28.9763, cat:'Food', extra:true },
+  { id:'x2-tram', day:'Day 2', t:'18:45', n:'Nostalgic tram on İstiklal (T2)', note:'The red heritage tram runs the length of İstiklal. A short ride; the street is crowded, so mind your pockets.', lat:41.0350, lng:28.9775, cat:'Landmark', extra:true },
+  { id:'x2-ciya', day:'Day 3', t:'13:40', n:'Çiya Sofrası, Kadıköy', note:'Famous for regional Anatolian home cooking, a short walk from the Kadıköy ferry.', lat:40.9904, lng:29.0242, cat:'Food', extra:true },
   { id:'x-mevlevi', day:'Day 1', t:'12:50', n:'Galata Mevlevi House Museum', note:'Former whirling-dervish lodge, right by Galata Tower.', lat:41.0298, lng:28.9744, cat:'Culture', extra:true },
   { id:'x-pera', day:'Day 1', t:'13:50', n:'Pera Museum', note:'Orientalist paintings and rotating exhibitions in Tepebaşı.', lat:41.0316, lng:28.9765, cat:'Culture', extra:true },
   { id:'x-dolmabahce', day:'Day 1', t:'15:05', n:'Dolmabahçe Palace', note:'19th-century Ottoman palace on the Bosphorus shore.', lat:41.0392, lng:29.0000, cat:'Culture', extra:true },
@@ -1869,6 +1940,7 @@ function openDetail(id){
       (s.trend ? '<span class="trendbadge" style="position:absolute;left:16px;top:16px;">🔥 Trending</span>' : '') +
     '</div>' +
     '<div class="detail-body-inner">' +
+      '<div class="photo-credit" id="detail-credit"></div>' +
       '<h2>'+s.n+'</h2>' +
       '<div class="detail-meta">' +
         '<span class="pill" style="background:'+color+'26;color:'+color+';">'+s.cat+'</span>' +
@@ -3582,6 +3654,14 @@ function renderPlan(){
     if (resetBtn) resetBtn.addEventListener('click', function(){ if (state.times) delete state.times[id]; persist(); renderPlan(); });
     list.appendChild(node);
     if (hasThumb) loadRealPhoto(node.querySelector('.pn-thumb'), s.n);
+    else if (WIKI_CATS[s.cat]) (function(tile){
+      wikiPhoto(s.n, function(res){
+        if (!res || !tile.parentNode) return;
+        var im = new Image();
+        im.onload = function(){ im.className = 'pn-thumb'; im.alt = ''; if (tile.parentNode) tile.parentNode.replaceChild(im, tile); };
+        im.src = res.url;
+      });
+    })(node.querySelector('.pn-glyph'));
     if (nextStop) {
       var g = document.createElement('div');
       g.className = 'pn-gap';

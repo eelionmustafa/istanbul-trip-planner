@@ -575,6 +575,12 @@ h1.page-title{font-family:var(--font-head);font-weight:800;font-size:34px;line-h
 .pn-gapchip .tight{color:var(--tulip);font-weight:700;}
 .pn-gapchip svg{flex-shrink:0;color:var(--gold);}
 
+.wx-alert{margin:0 0 14px;border-radius:14px;padding:12px 14px;border:1px solid var(--line);background:var(--card2);font-size:13.5px;line-height:1.45;}
+.wx-alert.warn{border-color:rgba(255,176,32,.6);background:rgba(255,176,32,.1);}
+.wx-alert.alert{border-color:rgba(255,92,92,.7);background:rgba(255,92,92,.12);}
+.wx-alert .wx-h{font-weight:700;margin-bottom:2px;}
+.wx-alert .wx-s{color:var(--ink-dim);font-size:12px;margin-top:6px;}
+.wx-alert button{appearance:none;margin-top:10px;min-height:40px;padding:0 14px;border-radius:10px;border:1px solid currentColor;background:transparent;color:inherit;font:600 13px var(--font-body);cursor:pointer;}
 .rain-row{margin:-8px 0 18px;}
 .rainchip{appearance:none;display:flex;align-items:center;gap:10px;width:100%;min-height:48px;background:var(--card2);border:1px solid var(--line);color:var(--ink);border-radius:14px;padding:0 14px;font:600 14px var(--font-body);cursor:pointer;text-align:left;}
 .rainchip span.sw{margin-left:auto;width:38px;height:22px;border-radius:99px;background:rgba(255,255,255,.14);position:relative;flex-shrink:0;transition:background .2s;}
@@ -719,6 +725,7 @@ body[data-view="trips"] .fab,body[data-view="explore"] .fab,body[data-view="map"
     </header>
     <div class="daychips" id="plan-daynav" role="tablist" aria-label="Choose a day"></div>
     <section class="overview" id="plan-stats" aria-label="Day overview"></section>
+    <div class="wx-alert" id="wx-alert" hidden></div>
     <div class="rain-row">
       <button class="rainchip" id="plan-rain" type="button" aria-pressed="false"></button>
       <p class="rain-note" id="rain-note" hidden></p>
@@ -3539,6 +3546,46 @@ function planGapHtml(s, next, planned){
   if (gap != null && gap < 15) tight = '<span class="tight">Tight, ' + gap + ' min</span>';
   return '<div class="pn-time"></div><div class="pn-gapchip">' + (parts.join('') || '<span>→</span>') + tight + '</div>';
 }
+/* ---------- LIVE WEATHER ALERT (Open-Meteo, free, no key) ---------- */
+var WX_DATES = { "Day 1":"2026-11-06", "Day 2":"2026-11-07", "Day 3":"2026-11-08" };
+var WX_KEY = 'wf_wx_v1', wxData = null;
+function wxLoad(cb){
+  try { var c = JSON.parse(localStorage.getItem(WX_KEY) || 'null'); if (c && Date.now() - c.t < 20 * 60000) { wxData = c.d; return cb(); } } catch (e) {}
+  var url = 'https://api.open-meteo.com/v1/forecast?latitude=41.0082&longitude=28.9784&daily=precipitation_sum,precipitation_probability_max,wind_gusts_10m_max,temperature_2m_max,temperature_2m_min&timezone=Europe%2FIstanbul&forecast_days=16';
+  var done = false, tm = setTimeout(function(){ if (!done) { done = true; cb(); } }, 7000);
+  fetch(url).then(function(r){ return r.json(); }).then(function(j){
+    if (done) return; done = true; clearTimeout(tm);
+    if (j && j.daily && j.daily.time) { wxData = j.daily; try { localStorage.setItem(WX_KEY, JSON.stringify({ t: Date.now(), d: j.daily })); } catch (e) {} }
+    cb();
+  }).catch(function(){ if (!done) { done = true; clearTimeout(tm); cb(); } });
+}
+function wxFor(day){
+  if (!wxData) return null;
+  var i = wxData.time.indexOf(WX_DATES[day]);
+  if (i < 0) return null;
+  var mm = wxData.precipitation_sum[i] || 0, pr = wxData.precipitation_probability_max[i] || 0, g = wxData.wind_gusts_10m_max[i] || 0;
+  var lvl = 'ok';
+  if (mm >= 20 || g >= 75) lvl = 'alert'; else if (mm >= 8 || pr >= 70 || g >= 55) lvl = 'warn';
+  return { lvl: lvl, mm: mm, pr: pr, g: g, hi: wxData.temperature_2m_max[i], lo: wxData.temperature_2m_min[i] };
+}
+function renderWxAlert(){
+  var el = document.getElementById('wx-alert'); if (!el) return;
+  var w = wxFor(planDay);
+  if (!w || w.lvl === 'ok') { el.hidden = true; return; }
+  var rainOn = !!(state.rain && state.rain[planDay]);
+  var title = w.lvl === 'alert' ? 'Weather alert for ' + planDay : 'Rain likely on ' + planDay;
+  var what = Math.round(w.mm) + ' mm rain expected (' + w.pr + '% chance), gusts up to ' + Math.round(w.g) + ' km/h, ' + Math.round(w.lo) + '–' + Math.round(w.hi) + '°C.';
+  el.className = 'wx-alert ' + w.lvl; el.hidden = false;
+  el.innerHTML = '<div class="wx-h">' + (w.lvl === 'alert' ? '⚠️ ' : '🌧️ ') + title + '</div><div>' + what + '</div>' +
+    (rainOn ? '<div class="wx-s">Rain plan is on.</div>' : '<button type="button" id="wx-go">Switch to Rain plan</button>') +
+    '<div class="wx-s">Live forecast, Open-Meteo. Also check the official Turkish Meteorological Service warnings (mgm.gov.tr).</div>';
+  var b = document.getElementById('wx-go');
+  if (b) b.onclick = function(){ state.rain[planDay] = true; planEdit = false; persist(); renderPlan(); };
+}
+function wxRefresh(){ wxLoad(function(){ renderWxAlert(); }); }
+setInterval(function(){ try { localStorage.removeItem(WX_KEY); } catch (e) {} wxRefresh(); }, 15 * 60000);
+document.addEventListener('visibilitychange', function(){ if (!document.hidden) wxRefresh(); });
+
 function renderPlan(){
   renderPlanDayNav();
   renderTransitLines();
@@ -3553,6 +3600,7 @@ function renderPlan(){
   rb.onclick = function(){ state.rain[planDay] = !state.rain[planDay]; planEdit = false; persist(); renderPlan(); };
   rn.hidden = !rainOn; rn.textContent = rainOn ? (RAIN_NOTE[planDay] || '') : '';
   document.getElementById('v-trips').classList.toggle('rain-on', rainOn);
+  if (wxData) renderWxAlert(); else wxRefresh();
 
   var totalWalkM = 0;
   for (var gi = 0; gi < ids.length - 1; gi++){

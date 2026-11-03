@@ -531,18 +531,18 @@ h1.page-title{font-family:var(--font-head);font-weight:800;font-size:34px;line-h
 .state-delayed .pn-card{border-color:rgba(240,88,75,.5);}
 .state-done .pn-card{opacity:.62;}
 .state-done .pn-name{text-decoration:line-through;text-decoration-color:rgba(255,255,255,.3);}
-.pn-top{display:flex;align-items:center;gap:8px;margin-bottom:9px;}
-.pn-cat{font:700 11px/1 var(--font-body);letter-spacing:.07em;text-transform:uppercase;padding:6px 10px;border-radius:999px;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex-shrink:1;}
+.pn-top{display:flex;align-items:center;gap:6px;margin-bottom:9px;}
+.pn-cat{font:700 10px/1 var(--font-body);letter-spacing:.04em;text-transform:uppercase;padding:6px 8px;border-radius:999px;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex-shrink:1;}
 .pn-state{white-space:nowrap;flex-shrink:0;}
 .pn-top{min-width:0;}
 .pn-card{overflow:hidden;}
-.pn-state{font:700 10.5px/1 var(--font-body);letter-spacing:.07em;text-transform:uppercase;padding:6px 9px;border-radius:999px;}
+.pn-state{font:700 10px/1 var(--font-body);letter-spacing:.04em;text-transform:uppercase;padding:6px 8px;border-radius:999px;}
 .st-next{color:var(--iznik);background:rgba(76,141,255,.14);}
 .st-delayed{color:var(--tulip);background:rgba(240,88,75,.14);}
 .st-done{color:#3DDC97;background:rgba(61,220,151,.12);}
 .st-upcoming{color:#FF9A62;background:rgba(255,122,69,.12);}
 .pn-spacer{flex:1;}
-.pn-icbtn{appearance:none;width:40px;height:40px;border-radius:50%;border:1px solid var(--line);background:transparent;color:var(--ink-dim);display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;margin:-6px -4px -6px 0;}
+.pn-icbtn{appearance:none;width:36px;height:36px;border-radius:50%;border:1px solid var(--line);background:transparent;color:var(--ink-dim);display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;margin:-6px -4px -6px 0;}
 .pn-icbtn.check.on{background:#3DDC97;border-color:#3DDC97;color:#04170e;}
 .pn-icbtn[aria-expanded="true"]{background:rgba(255,255,255,.1);color:var(--ink);}
 .pn-main{display:flex;gap:12px;cursor:pointer;}
@@ -556,6 +556,7 @@ h1.page-title{font-family:var(--font-head);font-weight:800;font-size:34px;line-h
 .pn-open .pn-more{display:block;}
 .pn-acts{display:flex;gap:8px;flex-wrap:wrap;}
 .pn-acts .btn,.pn-acts a.btn{flex:1 1 auto;min-height:42px;font-size:13.5px;padding:0 14px;justify-content:center;text-align:center;}
+.pn-glyph{display:flex;align-items:center;justify-content:center;}
 .pn-note{display:block;width:100%;margin-top:12px;background:var(--bg);border:1px solid var(--line);border-radius:12px;color:var(--ink);font:400 14px/1.45 var(--font-body);padding:11px 12px;min-height:64px;resize:vertical;}
 .pn-note::placeholder{color:var(--ink-faint);}
 .pn-menu{display:none;margin-top:13px;padding-top:13px;border-top:1px solid var(--line);gap:8px;flex-wrap:wrap;align-items:center;}
@@ -1567,8 +1568,8 @@ try{ if (window.supabase) supa = window.supabase.createClient(SUPA_URL, SUPA_ANO
 var currentUser = null;
 
 /* ---------- real photos (proxied through the place-photo Edge Function, so no API key ships to the browser) ---------- */
-var BUNDLED = {"hotel": ["hotel-1.jpg"], "cihangir": ["cihangir-1.jpg", "cihangir-2.jpg", "cihangir-3.jpg", "cihangir-4.jpg"], "museum": ["museum-1.jpg", "museum-2.jpg"], "galata": ["galata-1.jpg", "galata-2.jpg"], "viyana": ["viyana-1.jpg"], "kamondo": ["kamondo-1.jpg"], "gulluoglu": ["gulluoglu-1.jpg"], "cruise": ["cruise-1.jpg"], "arnavutkoy": ["arnavutkoy-1.jpg"], "ortakoy": ["ortakoy-1.jpg", "ortakoy-2.jpg"], "kizilkayalar": ["kizilkayalar-1.jpg", "kizilkayalar-2.jpg"], "hagia": ["hagia-1.jpg", "hagia-2.jpg"], "topkapi": ["topkapi-1.jpg"], "blue": ["blue-1.jpg"], "hippodrome": ["hippodrome-1.jpg"], "suleymaniye": ["suleymaniye-1.jpg"], "eminonu": ["eminonu-1.jpg", "eminonu-2.jpg", "eminonu-3.jpg", "eminonu-4.jpg"], "pierre": ["pierre-1.jpg", "pierre-2.jpg"], "balat": ["balat-1.jpg", "balat-2.jpg"], "velvet": ["velvet-1.jpg"], "istiklal": ["istiklal-1.jpg"], "durumzade": ["durumzade-1.jpg"], "uskudar": ["uskudar-1.jpg", "uskudar-2.jpg"], "salacak": ["salacak-1.jpg", "salacak-2.jpg"], "kaftan": ["kaftan-1.jpg"], "kuzguncuk": ["kuzguncuk-1.jpg"], "bay": ["bay-1.jpg", "bay-2.jpg"], "otagtepe": ["otagtepe-1.jpg", "otagtepe-2.jpg", "otagtepe-3.jpg"], "moda": ["moda-1.jpg", "moda-2.jpg"]};
-var BUNDLE_RULES = [["hotel", ["premist"]], ["cihangir", ["cihangir"]], ["museum", ["masumiyet"]], ["galata", ["galata tower"]], ["viyana", ["viyana"]], ["kamondo", ["kamondo"]], ["gulluoglu", ["güllüoğlu"]], ["cruise", ["bosphorus sunset cruise"]], ["arnavutkoy", ["arnavutköy"]], ["ortakoy", ["ortaköy"]], ["kizilkayalar", ["kızılkayalar"]], ["hagia", ["hagia sophia"]], ["topkapi", ["topkapı"]], ["blue", ["blue mosque"]], ["hippodrome", ["hippodrome"]], ["suleymaniye", ["süleymaniye"]], ["eminonu", ["spice bazaar"]], ["pierre", ["pierre loti"]], ["velvet", ["velvet"]], ["balat", ["balat"]], ["istiklal", ["stiklal avenue"]], ["durumzade", ["dürümzade"]], ["uskudar", ["üsküdar waterfront"]], ["salacak", ["salacak"]], ["kaftan", ["kaftan sokak"]], ["kuzguncuk", ["kuzguncuk"]], ["bay", ["bay mantı"]], ["otagtepe", ["otağtepe"]], ["moda", ["moda"]]];
+var BUNDLED = {"hotel": ["hotel-1.jpg"], "cihangir": ["cihangir-1.jpg", "cihangir-2.jpg", "cihangir-3.jpg", "cihangir-4.jpg"], "museum": ["museum-1.jpg", "museum-2.jpg"], "galata": ["galata-1.jpg", "galata-2.jpg"], "viyana": ["viyana-1.jpg"], "kamondo": ["kamondo-1.jpg"], "gulluoglu": ["gulluoglu-1.jpg"], "cruise": ["cruise-1.jpg"], "arnavutkoy": ["arnavutkoy-1.jpg"], "ortakoy": ["ortakoy-1.jpg", "ortakoy-2.jpg"], "kizilkayalar": ["kizilkayalar-1.jpg", "kizilkayalar-2.jpg"], "hagia": ["hagia-1.jpg", "hagia-2.jpg"], "topkapi": ["topkapi-1.jpg"], "blue": ["blue-1.jpg"], "hippodrome": ["hippodrome-1.jpg"], "suleymaniye": ["suleymaniye-1.jpg"], "eminonu": ["eminonu-1.jpg", "eminonu-2.jpg", "eminonu-3.jpg", "eminonu-4.jpg"], "pierre": ["pierre-1.jpg", "pierre-2.jpg"], "balat": ["balat-1.jpg", "balat-2.jpg"], "velvet": ["velvet-1.jpg"], "istiklal": ["istiklal-1.jpg"], "durumzade": ["durumzade-1.jpg"], "uskudar": ["uskudar-1.jpg", "uskudar-2.jpg"], "salacak": ["salacak-1.jpg", "salacak-2.jpg"], "kaftan": ["kaftan-1.jpg"], "kuzguncuk": ["kuzguncuk-1.jpg"], "bay": ["bay-1.jpg", "bay-2.jpg"], "otagtepe": ["otagtepe-1.jpg", "otagtepe-2.jpg", "otagtepe-3.jpg"], "moda": ["moda-1.jpg", "moda-2.jpg"], "taksim": ["taksim-1.jpg"], "sutis": ["sutis-1.jpg"], "eyup": ["eyup-1.jpg"], "kadikoy": ["kadikoy-1.jpg"], "halil": ["halil-1.jpg"], "cicek": ["cicek-1.jpg"], "salt": ["salt-1.jpg"], "bazaar": ["bazaar-1.jpg"]};
+var BUNDLE_RULES = [["hotel", ["premist"]], ["cihangir", ["cihangir"]], ["museum", ["masumiyet"]], ["galata", ["galata tower"]], ["viyana", ["viyana"]], ["kamondo", ["kamondo"]], ["gulluoglu", ["güllüoğlu"]], ["cruise", ["bosphorus sunset cruise"]], ["arnavutkoy", ["arnavutköy"]], ["ortakoy", ["ortaköy"]], ["kizilkayalar", ["kızılkayalar"]], ["hagia", ["hagia sophia"]], ["topkapi", ["topkapı"]], ["blue", ["blue mosque"]], ["hippodrome", ["hippodrome"]], ["suleymaniye", ["süleymaniye"]], ["eminonu", ["spice bazaar"]], ["pierre", ["pierre loti"]], ["velvet", ["velvet"]], ["balat", ["balat"]], ["istiklal", ["stiklal avenue"]], ["durumzade", ["dürümzade"]], ["uskudar", ["üsküdar waterfront"]], ["salacak", ["salacak"]], ["kaftan", ["kaftan sokak"]], ["kuzguncuk", ["kuzguncuk"]], ["bay", ["bay mantı"]], ["otagtepe", ["otağtepe"]], ["moda", ["moda"]], ["taksim", ["taksim square"]], ["sutis", ["sütiş", "sutis"]], ["eyup", ["eyüp sultan"]], ["kadikoy", ["kadıköy market"]], ["halil", ["halil lahmacun"]], ["cicek", ["çiçek pasajı"]], ["salt", ["salt galata"]], ["bazaar", ["grand bazaar"]]];
 function bundledFor(name){
   var t = String(name || '').toLowerCase().replace(/i̇/g, 'i');
   for (var i = 0; i < BUNDLE_RULES.length; i++) {
@@ -1610,6 +1611,16 @@ var CAT_ICON = {
   Shopping: '<path d="M6 8h12l-1 12H7L6 8z" stroke-linejoin="round"/><path d="M9 8V6a3 3 0 0 1 6 0v2"/>',
   Logistics: '<rect x="4" y="8" width="16" height="11" rx="1.5"/><path d="M9 8V6a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2"/>'
 };
+/* coffee and breakfast get their own icon instead of the generic food glyph */
+var GLYPH_COFFEE = '<path d="M5 9h11v5a5 5 0 0 1-5 5h-1a5 5 0 0 1-5-5V9z" stroke-linejoin="round"/><path d="M16 11h1.500a2.500 2.500 0 0 1 0 5H16"/><path d="M8 3v3M12 3v3"/>';
+var GLYPH_BREAKFAST = '<path d="M3.500 16C4.500 10 8 6.500 12 6.500S19.500 10 20.500 16l-3.200.8-1.800-2.300L12 17l-3.500-2.500-1.800 2.300z" stroke-linejoin="round"/><path d="M9 8.500l1.200 4M15 8.500l-1.200 4"/>';
+function glyphFor(s){
+  var n = String((s && s.n) || '');
+  if (/breakfast|kahvaltı/i.test(n)) return GLYPH_BREAKFAST;
+  if (/coffee|kahve|caf[eé]\b|çay/i.test(n)) return GLYPH_COFFEE;
+  return CAT_ICON[s.cat] || CAT_ICON.Landmark;
+}
+
 var DAY_COLOR = { "Day 1":"#4F7DFA", "Day 2":"#FF5A5F", "Day 3":"#9B5DE5" };
 
 /* Well-known Istanbul attractions NOT already in the itinerary — browsable in
@@ -1820,7 +1831,7 @@ function buildCard(s){
   card.innerHTML =
     '<div class="thumb" style="background:radial-gradient(circle at 30% 20%,'+color+'55,transparent 60%),linear-gradient(135deg,'+color+',#0c0c0c 135%);">' +
       '<img class="realphoto" data-w="360" alt="">' +
-      '<svg class="thumb-icon" width="46" height="46" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.5" stroke-linecap="round">'+CAT_ICON[s.cat]+'</svg>' +
+      '<svg class="thumb-icon" width="46" height="46" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.5" stroke-linecap="round">'+glyphFor(s)+'</svg>' +
       (s.trend ? '<span class="trendbadge">🔥 Trending</span>' : '') +
       '<div class="addbtn'+(added?' on':'')+'">'+
         '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">'+(added?'<polyline points="20 6 9 17 4 12"/>':'<line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>')+'</svg>'+
@@ -1854,7 +1865,7 @@ function openDetail(id){
   document.getElementById('detail-body').innerHTML =
     '<div class="detail-hero" style="background:radial-gradient(circle at 30% 20%,'+color+'66,transparent 60%),linear-gradient(135deg,'+color+',#0c0c0c 135%);">' +
       '<img class="realphoto" id="detail-photo" data-w="800" alt="">' +
-      '<svg width="86" height="86" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.3" stroke-linecap="round">'+CAT_ICON[s.cat]+'</svg>' +
+      '<svg width="86" height="86" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.3" stroke-linecap="round">'+glyphFor(s)+'</svg>' +
       (s.trend ? '<span class="trendbadge" style="position:absolute;left:16px;top:16px;">🔥 Trending</span>' : '') +
     '</div>' +
     '<div class="detail-body-inner">' +
@@ -1996,7 +2007,7 @@ function initRouteUI(){
 initRouteUI();
 
 function stopDivIcon(s, num, color, isActive){
-  var glyph = CAT_ICON[s.cat] || CAT_ICON.Landmark;
+  var glyph = glyphFor(s);
   var html =
     '<div class="map-pin'+(isActive?' active':'')+'" style="color:'+color+';">' +
       '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">'+glyph+'</svg>' +
@@ -2065,7 +2076,7 @@ function buildMapCard(s){
   card.innerHTML =
     '<div class="thumb" style="background:radial-gradient(circle at 30% 20%,'+color+'55,transparent 60%),linear-gradient(135deg,'+color+',#0c0c0c 135%);">' +
       '<img class="realphoto" data-w="300" alt="">' +
-      '<svg class="thumb-icon" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.5" stroke-linecap="round">'+CAT_ICON[s.cat]+'</svg>' +
+      '<svg class="thumb-icon" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.5" stroke-linecap="round">'+glyphFor(s)+'</svg>' +
       (s.trend ? '<span class="trendbadge">🔥</span>' : '') +
       '<div class="addbtn'+(added?' on':'')+'" aria-label="'+(added?'Remove from plan':'Add to plan')+'">'+
         '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">'+(added?'<polyline points="20 6 9 17 4 12"/>':'<line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>')+'</svg>'+
@@ -3525,7 +3536,7 @@ function renderPlan(){
           (s.note ? '<div class="pn-desc">' + escapeHtml(s.note) + '</div>' : '') +
           (planned ? '<div class="pn-meta"><span>⏱ ' + (planned >= 60 ? Math.floor(planned / 60) + ' h ' + (planned % 60 ? planned % 60 + ' min' : '') : planned + ' min') + ' planned</span></div>' : '') +
           '</div>' +
-          (hasThumb ? '<img class="pn-thumb" data-w="240" alt="">' : '') +
+          (hasThumb ? '<img class="pn-thumb" data-w="240" alt="">' : (s.cat !== 'Logistics' ? '<div class="pn-thumb pn-glyph" aria-hidden="true" style="color:' + color + ';background:' + color + '1f;"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">' + glyphFor(s) + '</svg></div>' : '')) +
         '</div>' +
         '<div class="pn-more">' +
           '<div class="pn-acts">' +
